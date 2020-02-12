@@ -39,7 +39,7 @@ func resourceSegmentTrackingPlanCreate(r *schema.ResourceData, meta interface{})
 	fmt.Printf("%+v\n", s)
 	trackingPlan, err := client.CreateTrackingPlan(displayName, s)
 	if err != nil {
-		return err
+		return fmt.Errorf("ERROR Creating Tracking Plan!! DisplayName: %q; err: %v", displayName, err)
 	}
 
 	planName := parseNameID(trackingPlan.Name)
@@ -52,7 +52,7 @@ func resourceSegmentTrackingPlanRead(r *schema.ResourceData, meta interface{}) e
 	planName := r.Id()
 	trackingPlan, err := client.GetTrackingPlan(planName)
 	if err != nil {
-		return err
+		return fmt.Errorf("ERROR Reading Tracking Plan!! PlanName: %q; err: %v", planName, err)
 	}
 	stringRules, err := json.Marshal(trackingPlan.Rules)
 	if err != nil {
@@ -70,7 +70,7 @@ func resourceSegmentTrackingPlanDelete(r *schema.ResourceData, meta interface{})
 
 	err := client.DeleteTrackingPlan(planName)
 	if err != nil {
-		return err
+		return fmt.Errorf("ERROR Deleting Tracking Plan!! PlanName: %q; err: %v", planName, err)
 	}
 
 	return nil
@@ -92,7 +92,7 @@ func resourceSegmentTrackingPlanUpdate(r *schema.ResourceData, meta interface{})
 	}
 	_, err := client.UpdateTrackingPlan(planName, paths, updatedPlan)
 	if err != nil {
-		return err
+		return fmt.Errorf("ERROR Updating Tracking Plan!! PlanName: %q; err: %v", planName, err)
 	}
 
 	return resourceSegmentTrackingPlanRead(r, meta)
