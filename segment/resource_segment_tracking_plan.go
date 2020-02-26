@@ -59,7 +59,7 @@ func resourceSegmentTrackingPlanRead(r *schema.ResourceData, meta interface{}) e
 		return err
 	}
 	r.Set("display_name", trackingPlan.DisplayName)
-	r.Set("rules", string(stringRules))
+	r.Set("rules", stringRules)
 
 	return nil
 }
