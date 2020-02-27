@@ -27,6 +27,9 @@ func resourceSegmentTrackingPlan() *schema.Resource {
 		Read:   resourceSegmentTrackingPlanRead,
 		Delete: resourceSegmentTrackingPlanDelete,
 		Update: resourceSegmentTrackingPlanUpdate,
+		Importer: &schema.ResourceImporter{
+			State: resourceSegmentTrackingPlanImport,
+		}
 	}
 }
 
@@ -96,6 +99,27 @@ func resourceSegmentTrackingPlanUpdate(r *schema.ResourceData, meta interface{})
 	}
 
 	return resourceSegmentTrackingPlanRead(r, meta)
+}
+
+func resourceSegmentTrackingPlanImport(r *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
+	client := meta.(*segment.Client)
+	s, err := client.GetTrackingPlan(r.Id())
+	if err != nil {
+		return nil, fmt.Errorf("invalid tracking plan: %q; err: %v", r.Id(), err)
+	}
+	stringRules, err := json.Marshal(s.Rules)
+	if err != nil {
+		return err
+	}
+	planName := parseNameID(s.Name)
+	r.SetId(planName)
+	r.Set("display_name", s.DisplayName)
+	r.Set("rules", stringRules)
+
+	results := make([]*schema.ResourceData, 1)
+	results[0] = r
+
+	return results, nil
 }
 
 func parseNameID(name string) string {
