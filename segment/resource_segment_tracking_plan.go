@@ -29,7 +29,7 @@ func resourceSegmentTrackingPlan() *schema.Resource {
 		Update: resourceSegmentTrackingPlanUpdate,
 		Importer: &schema.ResourceImporter{
 			State: resourceSegmentTrackingPlanImport,
-		}
+		},
 	}
 }
 
@@ -53,6 +53,15 @@ func resourceSegmentTrackingPlanCreate(r *schema.ResourceData, meta interface{})
 func resourceSegmentTrackingPlanRead(r *schema.ResourceData, meta interface{}) error {
 	client := meta.(*segment.Client)
 	planName := r.Id()
+	names, err0 := getNameIDs(client)
+	if err0 != nil {
+		return err0
+	}
+	if _, ok := names[planName]; !ok {
+		resourceSegmentTrackingPlanDelete(r, meta)
+		resourceSegmentTrackingPlanCreate(r, meta)
+		return nil
+	}
 	trackingPlan, err := client.GetTrackingPlan(planName)
 	if err != nil {
 		return fmt.Errorf("ERROR Reading Tracking Plan!! PlanName: %q; err: %v", planName, err)
@@ -63,14 +72,12 @@ func resourceSegmentTrackingPlanRead(r *schema.ResourceData, meta interface{}) e
 	}
 	r.Set("display_name", trackingPlan.DisplayName)
 	r.Set("rules", stringRules)
-
 	return nil
 }
 
 func resourceSegmentTrackingPlanDelete(r *schema.ResourceData, meta interface{}) error {
 	client := meta.(*segment.Client)
 	planName := r.Id()
-
 	err := client.DeleteTrackingPlan(planName)
 	if err != nil {
 		return fmt.Errorf("ERROR Deleting Tracking Plan!! PlanName: %q; err: %v", planName, err)
@@ -97,7 +104,6 @@ func resourceSegmentTrackingPlanUpdate(r *schema.ResourceData, meta interface{})
 	if err != nil {
 		return fmt.Errorf("ERROR Updating Tracking Plan!! PlanName: %q; err: %v", planName, err)
 	}
-
 	return resourceSegmentTrackingPlanRead(r, meta)
 }
 
@@ -109,7 +115,7 @@ func resourceSegmentTrackingPlanImport(r *schema.ResourceData, meta interface{})
 	}
 	stringRules, err := json.Marshal(s.Rules)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	planName := parseNameID(s.Name)
 	r.SetId(planName)
@@ -125,4 +131,17 @@ func resourceSegmentTrackingPlanImport(r *schema.ResourceData, meta interface{})
 func parseNameID(name string) string {
 	nameSplit := strings.Split(name, "/")
 	return nameSplit[len(nameSplit)-1]
+}
+
+func getNameIDs(client *segment.Client) (map[string]string, error) {
+	plans, err := client.ListTrackingPlans()
+	if err != nil {
+		return nil, err
+	}
+	names := make(map[string]string)
+	for _, element := range plans.TrackingPlans {
+		id := parseNameID(element.Name)
+		names[id] = element.Name
+	}
+	return names, nil
 }

@@ -87,6 +87,12 @@ github.com/fenderdigital/segment-apis-go v0.2.1-0.20200224232732-af17363e9107 h1
 github.com/fenderdigital/segment-apis-go v0.2.1-0.20200224232732-af17363e9107/go.mod h1:tVavWZ4MjceFhfNFXfTfRz4anNupInKZtIRAoOCtIH4=
 github.com/fenderdigital/segment-apis-go v0.2.1-0.20200226225640-f30e453f7bac h1:sFgTptmByM1hJDtw0B2F0HR7pYETihxu17KQpzC1pEc=
 github.com/fenderdigital/segment-apis-go v0.2.1-0.20200226225640-f30e453f7bac/go.mod h1:tVavWZ4MjceFhfNFXfTfRz4anNupInKZtIRAoOCtIH4=
+github.com/fenderdigital/segment-apis-go v0.2.1-0.20200227010038-c1ab84e2250f h1:sl6AAKXJXSkRRoxQQxU3XXudA33tBjJ9ndNCo8nEjDk=
+github.com/fenderdigital/segment-apis-go v0.2.1-0.20200227010038-c1ab84e2250f/go.mod h1:tVavWZ4MjceFhfNFXfTfRz4anNupInKZtIRAoOCtIH4=
+github.com/fenderdigital/segment-apis-go v0.2.1-0.20200227010756-8f3c58a267db h1:XKXTapqjFPTmfbAjuLDIHXnTOFeJAH8J7ESl0CnI1GI=
+github.com/fenderdigital/segment-apis-go v0.2.1-0.20200227010756-8f3c58a267db/go.mod h1:tVavWZ4MjceFhfNFXfTfRz4anNupInKZtIRAoOCtIH4=
+github.com/fenderdigital/segment-apis-go v0.2.1-0.20200227012208-a7a6b49378b9 h1:a6ZElvbTHwwIizukBkfZYaMXPsONec4W1JkDLJf70rY=
+github.com/fenderdigital/segment-apis-go v0.2.1-0.20200227012208-a7a6b49378b9/go.mod h1:tVavWZ4MjceFhfNFXfTfRz4anNupInKZtIRAoOCtIH4=
 github.com/fsnotify/fsnotify v1.4.7/go.mod h1:jwhsz4b93w/PPRr/qN1Yymfu8t87LnFCMoQvtojpjFo=
 github.com/ghodss/yaml v1.0.0/go.mod h1:4dBDuWmgqj2HViK6kFavaiC9ZROes6MMH2rRYeMEF04=
 github.com/go-kit/kit v0.8.0/go.mod h1:xBxKIO96dXMWWy0MnWVtmwkA9/13aqxPnvrjFYMA2as=
