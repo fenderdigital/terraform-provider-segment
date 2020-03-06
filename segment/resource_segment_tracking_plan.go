@@ -22,6 +22,11 @@ func resourceSegmentTrackingPlan() *schema.Resource {
 				Required: true,
 				ForceNew: false,
 			},
+			"name": {
+				Type:     schema.TypeString,
+				Computed: true,
+				ForceNew: true,
+			},
 		},
 		Create: resourceSegmentTrackingPlanCreate,
 		Read:   resourceSegmentTrackingPlanRead,
@@ -58,20 +63,20 @@ func resourceSegmentTrackingPlanRead(r *schema.ResourceData, meta interface{}) e
 		return err0
 	}
 	if _, ok := names[planName]; !ok {
-		resourceSegmentTrackingPlanDelete(r, meta)
-		resourceSegmentTrackingPlanCreate(r, meta)
+		r.SetId("")
 		return nil
 	}
 	trackingPlan, err := client.GetTrackingPlan(planName)
 	if err != nil {
 		return fmt.Errorf("ERROR Reading Tracking Plan!! PlanName: %q; err: %v", planName, err)
 	}
-	stringRules, err := json.Marshal(trackingPlan.Rules)
+	stringRules, err := json.MarshalIndent(trackingPlan.Rules, "", "  ")
 	if err != nil {
 		return err
 	}
 	r.Set("display_name", trackingPlan.DisplayName)
-	r.Set("rules", stringRules)
+	r.Set("rules", string(stringRules))
+	r.Set("name", planName)
 	return nil
 }
 
@@ -119,6 +124,7 @@ func resourceSegmentTrackingPlanImport(r *schema.ResourceData, meta interface{})
 	}
 	planName := parseNameID(s.Name)
 	r.SetId(planName)
+	r.Set("name", planName)
 	r.Set("display_name", s.DisplayName)
 	r.Set("rules", stringRules)
 
