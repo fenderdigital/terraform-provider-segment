@@ -21,6 +21,12 @@ func resourceSegmentTrackingPlan() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: false,
+				StateFunc: func(val interface{}) string {
+					s := segment.Rules{}
+					json.Unmarshal([]byte(val.(string)), &s)
+					result, _ := json.MarshalIndent(s, "", "  ")
+					return string(result)
+				},
 			},
 			"name": {
 				Type:     schema.TypeString,
